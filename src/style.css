@@ -9,7 +9,9 @@ canvas {
 ::-webkit-scrollbar {
   display: none;
 }
-
+body > .tp-dfwv {
+  width: 390px;
+}
 #c1 {
   position: absolute;
   background-color: black;

@@ -1,4 +1,4 @@
-import CanvasParameters from "canvas-parameters";
+import { Pane } from "tweakpane";
 
 const canvas = document.getElementById("c1") as HTMLCanvasElement;
 const ctx = canvas.getContext("2d");
@@ -128,82 +128,63 @@ if (settings.generateAutomaticly) {
 
 animate();
 
-new CanvasParameters(
-	[
-		{
-			type: "range",
-			min: "1",
-			max: "10",
-			value: settings.countOnClick,
-			onChange: (value) => {
-				settings.countOnClick = value;
-			},
-			placeholder: "Количество шаров в клик / тик",
-			name: "countOnClick",
-		},
-		{
-			type: "range",
-			min: "1",
-			max: "10",
-			value: settings.moveSpeed,
-			onChange: (value) => {
-				settings.moveSpeed = value;
-			},
-			placeholder: "Скорость перемещения шаров",
-			name: "moveSpeed",
-		},
-		{
-			type: "range",
-			min: "1",
-			max: "20",
-			value: settings.size,
-			onChange: (value) => {
-				settings.size = value;
-			},
-			placeholder: "Максимальный размер шаров",
-			name: "size",
-		},
-		{
-			type: "range",
-			min: "1",
-			max: "200",
-			value: settings.maxDistance,
-			onChange: (value) => {
-				settings.maxDistance = value;
-			},
-			placeholder: "Длина линии разрыва",
-			name: "maxDistance",
-		},
-		{
-			type: "range",
-			min: "0.01",
-			max: "0.1",
-			step: "0.01",
-			value: settings.decreaseSize,
-			onChange: (value) => {
-				settings.decreaseSize = value;
-			},
-			placeholder: "Скорость уменьшения шаров",
-			name: "decreaseSize",
-		},
-		{
-			type: "checkbox",
-			value: "",
-			checked: settings.generateAutomaticly,
-			onChange: () => {
-				settings.generateAutomaticly = !settings.generateAutomaticly;
-			},
-			placeholder: "Создавать автоматически",
-			name: "generateAutomaticly",
-		},
-	],
-	{
-		helpText: [
-			"Водите мышкой или кликайте",
-			"Двойной клик что бы включить выключить настройки",
-		],
-	},
-);
+const pane = new Pane();
+const f1 = pane.addFolder({
+	title: "Настройки",
+});
+const countOnClickHandler = f1.addBinding(settings, "countOnClick", {
+	label: "Количество шаров в клик / тик",
+	min: 1,
+	max: 10,
+	step: 1,
+});
+countOnClickHandler.on("change", (e) => {
+	settings.countOnClick = e.value;
+});
 
-// maxDistance: 1,
-// generateAutomaticly: true,
+const moveSpeedHandler = f1.addBinding(settings, "moveSpeed", {
+	label: "Скорость перемещения шаров",
+	min: 1,
+	max: 10,
+	step: 1,
+});
+moveSpeedHandler.on("change", (e) => {
+	settings.moveSpeed = e.value;
+});
+
+const sizeHandler = f1.addBinding(settings, "size", {
+	label: "Максимальный размер шаров",
+	min: 1,
+	max: 20,
+	step: 1,
+});
+sizeHandler.on("change", (e) => {
+	settings.size = e.value;
+});
+
+const maxDistanceHandler = f1.addBinding(settings, "maxDistance", {
+	label: "Длина линии соединения",
+	min: 1,
+	max: 300,
+	step: 1,
+});
+maxDistanceHandler.on("change", (e) => {
+	settings.maxDistance = e.value;
+});
+
+const decreaseSizeHandler = f1.addBinding(settings, "decreaseSize", {
+	label: "Скорость уменьшения шаров",
+	min: 0.01,
+	max: 0.1,
+	step: 0.01,
+});
+decreaseSizeHandler.on("change", (e) => {
+	settings.decreaseSize = e.value;
+});
+
+const autoGenerateHandler = f1.addBinding(settings, "generateAutomaticly", {
+	label: "Создавать автоматически",
+});
+autoGenerateHandler.on("change", (e) => {
+	settings.generateAutomaticly = e.value;
+});
